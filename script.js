@@ -135,10 +135,13 @@ async function displaySavedWords() {
 
         // Clic ailleurs pour cacher le bouton supprimer
         document.addEventListener('click', (e) => {
-            if (!card.contains(e.target)) {
-                card.classList.remove('show-delete');
-                deleteBtn.classList.remove('show');
-            }
+            document.querySelectorAll('.card').forEach(card => {
+                const deleteBtn = card.querySelector('.delete-card-btn');
+                if (!card.contains(e.target)) {
+                    card.classList.remove('show-delete');
+                    if (deleteBtn) deleteBtn.classList.remove('show');
+                }
+            });
         });
 
         cardsContainer.appendChild(card);
@@ -165,39 +168,4 @@ swiper.on('slideChange', function () {
 
 // Afficher les cartes une première fois au chargement de la page
 displaySavedWords();
-
-const playBtn = document.getElementById('play-btn');
-
-playBtn.addEventListener('click', () => {
-    const words = getSavedWords();
-    if (words.length === 0) {
-        alert("Ajoute des cartes pour jouer !");
-        return;
-    }
-
-    let score = 0;
-    let current = 0;
-
-    function askNext() {
-        if (current >= words.length) {
-            alert(`Jeu terminé ! Score : ${score}/${words.length}`);
-            displaySavedWords();
-            return;
-        }
-
-        const word = words[current];
-        const userAnswer = prompt(`Traduisez en anglais : "${word.original}"`);
-
-        if (userAnswer && userAnswer.trim().toLowerCase() === word.translated.toLowerCase()) {
-            score++;
-            alert("Bonne réponse !");
-        } else {
-            alert(`Faux ! La bonne réponse était : ${word.translated}`);
-        }
-        current++;
-        askNext();
-    }
-
-    askNext();
-});
 
