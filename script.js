@@ -8,8 +8,13 @@ const swiper = new Swiper('.swiper', {
 
 // --- PARTIE TRADUCTION (PAGE 1) ---
 
-// Utilisation de l'API LibreTranslate
-const LIBRETRANSLATE_URL = 'http://localhost:3001/translate';
+// Fonction de traduction directe via l'API MyMemory
+async function traduire(text, source = "fr", target = "en") {
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${target}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.responseData.translatedText;
+}
 
 // Sélection des éléments HTML
 const inputText = document.getElementById('input-text');
@@ -20,40 +25,18 @@ const cardsContainer = document.getElementById('cards-container');
 // Événement au clic sur le bouton traduire
 translateBtn.addEventListener('click', async () => {
     const textToTranslate = inputText.value.trim();
+    if (!textToTranslate) return alert('Veuillez entrer du texte à traduire.');
 
-    if (textToTranslate === '') {
-        alert('Veuillez entrer du texte à traduire.');
-        return;
-    }
-
-    outputText.textContent = 'Traduction en cours...';
-
+    outputText.textContent = "Traduction en cours...";
     try {
-        const response = await fetch(LIBRETRANSLATE_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                q: textToTranslate,
-                source: 'fr', // langue du texte à traduire
-                target: 'en' // langue cible
-            })
-        });
+        const translatedText = await traduire(textToTranslate, "fr", "en");
+        outputText.textContent = translatedText;
 
-        const data = await response.json();
-
-        if (data.translatedText) {
-            const translatedText = data.translatedText;
-            outputText.textContent = translatedText;
-
-            saveWord(textToTranslate, translatedText);
-            displaySavedWords();
-        } else {
-            outputText.textContent = 'Erreur lors de la traduction.';
-        }
-
-    } catch (error) {
-        console.error('Erreur:', error);
-        outputText.textContent = 'Impossible de contacter le service de traduction.';
+        saveWord(textToTranslate, translatedText);
+        displaySavedWords();
+    } catch (e) {
+        console.error(e);
+        outputText.textContent = "Erreur de traduction";
     }
 });
 
