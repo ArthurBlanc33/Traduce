@@ -6,7 +6,7 @@ const swiper = new Swiper('.swiper', {
 });
 
 // --- CONFIG SUPABASE ---
-const SUPABASE_URL = 'https://dcguumzcbybbbnnrodmu.supabase.com';
+const SUPABASE_URL = 'https://dcguumzcbybbbnnrodmu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjZ3V1bXpjYnliYmJubnJvZG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3MjIwMjEsImV4cCI6MjA2ODI5ODAyMX0.ua8gsFijlwUHGnByYGTKVE0Bsaje22oRtV0vWK5K0Vk';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
