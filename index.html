@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traducteur & Cartes</title>
+    <!-- Lien vers le CSS de Swiper.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <!-- Lien vers notre propre CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+    <!-- Le conteneur principal de Swiper -->
+    <div class="swiper">
+        <div class="swiper-wrapper">
+
+            <!-- Diapositive 1: La Page de Traduction -->
+            <div class="swiper-slide" id="page-traduction">
+                <div class="container">
+                    <h1>Traducteur</h1>
+                    <textarea id="input-text" placeholder="Entrez un mot ou une phrase..."></textarea>
+                    <button id="translate-btn">Traduire</button>
+                    <div id="output-text-container">
+                        <p id="output-text">Traduction...</p>
+                    </div>
+                    <div class="swipe-indicator">
+                        <p>Glissez vers la gauche pour voir vos cartes</p>
+                        <span>←</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositive 2: La Page des Cartes -->
+            <div class="swiper-slide" id="page-cartes">
+                <div class="container">
+                    <h1>Mes Cartes</h1>
+                    <div id="cards-container">
+                        <!-- Les cartes seront ajoutées ici par JavaScript -->
+                    </div>
+                    <div class="swipe-indicator">
+                        <span>→</span>
+                        <p>Glissez vers la droite pour traduire</p>
+                    </div>
+                    <button id="play-btn" class="play-btn">Jouer</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Lien vers le JavaScript de Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Lien vers notre propre JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
