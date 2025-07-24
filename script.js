@@ -94,7 +94,7 @@ async function displaySavedWords() {
         let longPressTimer;
         let isLongPress = false;
 
-        // Retourner la carte au clic
+        // Clic simple : retourne la carte (affiche le mot en français)
         card.addEventListener('click', (e) => {
             if (!isLongPress && !deleteBtn.classList.contains('show')) {
                 card.classList.toggle('flipped');
@@ -131,17 +131,6 @@ async function displaySavedWords() {
         deleteBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             deleteWord(word.id);
-        });
-
-        // Clic ailleurs pour cacher le bouton supprimer
-        document.addEventListener('click', (e) => {
-            document.querySelectorAll('.card').forEach(card => {
-                const deleteBtn = card.querySelector('.delete-card-btn');
-                if (!card.contains(e.target)) {
-                    card.classList.remove('show-delete');
-                    if (deleteBtn) deleteBtn.classList.remove('show');
-                }
-            });
         });
 
         cardsContainer.appendChild(card);
