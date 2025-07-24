@@ -32,8 +32,8 @@ translateBtn.addEventListener('click', async () => {
         const translatedText = await traduire(textToTranslate, "fr", "en");
         outputText.textContent = translatedText;
 
-        saveWord(textToTranslate, translatedText);
-        displaySavedWords();
+        await saveWord(textToTranslate, translatedText);
+        await displaySavedWords();
     } catch (e) {
         console.error(e);
         outputText.textContent = "Erreur de traduction";
@@ -44,25 +44,24 @@ translateBtn.addEventListener('click', async () => {
 // --- PARTIE CARTES (PAGE 2) ---
 
 // Fonction pour récupérer les mots sauvegardés depuis le localStorage
-function getSavedWords() {
-    // JSON.parse transforme le texte en objet JavaScript
-    return JSON.parse(localStorage.getItem('savedWords')) || [];
+async function getSavedWords() {
+    const { data, error } = await supabase
+        .from('words')
+        .select('*')
+        .order('id', { ascending: false });
+    return data || [];
 }
 
 // Fonction pour sauvegarder un nouveau mot
-function saveWord(original, translated) {
-    const words = getSavedWords();
-    
-    // Ajoute le nouveau mot (en objet) à la liste
-    words.unshift({ original, translated }); // unshift pour l'ajouter au début
-
-    // Sauvegarde la liste mise à jour dans le localStorage (JSON.stringify transforme l'objet en texte)
-    localStorage.setItem('savedWords', JSON.stringify(words));
+async function saveWord(original, translated) {
+    await supabase
+        .from('words')
+        .insert([{ original, translated }]);
 }
 
 // Fonction pour afficher les cartes
-function displaySavedWords() {
-    const words = getSavedWords();
+async function displaySavedWords() {
+    const words = await getSavedWords();
     cardsContainer.innerHTML = '';
 
     if (words.length === 0) {
@@ -70,7 +69,7 @@ function displaySavedWords() {
         return;
     }
 
-    words.forEach((word, index) => {
+    words.forEach((word) => {
         const card = document.createElement('div');
         card.classList.add('card');
 
@@ -80,9 +79,8 @@ function displaySavedWords() {
             <button class="delete-card-btn">Supprimer</button>
         `;
 
-        // Ajoute l'événement de suppression
         card.querySelector('.delete-card-btn').addEventListener('click', () => {
-            deleteWord(index);
+            deleteWord(word.id);
         });
 
         cardsContainer.appendChild(card);
@@ -90,11 +88,12 @@ function displaySavedWords() {
 }
 
 // Fonction pour supprimer un mot sauvegardé
-function deleteWord(index) {
-    const words = getSavedWords();
-    words.splice(index, 1); // Supprime la carte à l'index donné
-    localStorage.setItem('savedWords', JSON.stringify(words));
-    displaySavedWords(); // Rafraîchit l'affichage
+async function deleteWord(id) {
+    await supabase
+        .from('words')
+        .delete()
+        .eq('id', id);
+    displaySavedWords();
 }
 
 // Écoute l'événement de changement de slide pour rafraîchir les cartes
@@ -143,3 +142,8 @@ playBtn.addEventListener('click', () => {
 
     askNext();
 });
+
+// --- CONFIG SUPABASE ---
+const SUPABASE_URL = 'https://dcguumzcbybbbnnrodmu.supabase.com';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjZ3V1bXpjYnliYmJubnJvZG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3MjIwMjEsImV4cCI6MjA2ODI5ODAyMX0.ua8gsFijlwUHGnByYGTKVE0Bsaje22oRtV0vWK5K0Vk';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
