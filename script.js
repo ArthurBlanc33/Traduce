@@ -79,13 +79,66 @@ async function displaySavedWords() {
         card.classList.add('card');
 
         card.innerHTML = `
-            <div class="original-word">${word.original}</div>
-            <div class="translated-word">${word.translated}</div>
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="translated-word">${word.translated}</div>
+                </div>
+                <div class="card-back">
+                    <div class="original-word">${word.original}</div>
+                </div>
+            </div>
             <button class="delete-card-btn">Supprimer</button>
         `;
 
-        card.querySelector('.delete-card-btn').addEventListener('click', () => {
+        const deleteBtn = card.querySelector('.delete-card-btn');
+        let longPressTimer;
+        let isLongPress = false;
+
+        // Retourner la carte au clic
+        card.addEventListener('click', (e) => {
+            if (!isLongPress && !deleteBtn.classList.contains('show')) {
+                card.classList.toggle('flipped');
+            }
+            isLongPress = false;
+        });
+
+        // Appui long (desktop)
+        card.addEventListener('mousedown', (e) => {
+            if (e.button === 0) {
+                isLongPress = false;
+                longPressTimer = setTimeout(() => {
+                    isLongPress = true;
+                    card.classList.add('show-delete');
+                    deleteBtn.classList.add('show');
+                }, 800);
+            }
+        });
+        card.addEventListener('mouseup', () => clearTimeout(longPressTimer));
+        card.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
+
+        // Appui long (mobile)
+        card.addEventListener('touchstart', () => {
+            isLongPress = false;
+            longPressTimer = setTimeout(() => {
+                isLongPress = true;
+                card.classList.add('show-delete');
+                deleteBtn.classList.add('show');
+            }, 800);
+        });
+        card.addEventListener('touchend', () => clearTimeout(longPressTimer));
+
+        // Bouton supprimer
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             deleteWord(word.id);
+        });
+
+        // Clic ailleurs pour cacher le bouton supprimer
+        document.addEventListener('click', (e) => {
+            if (!card.contains(e.target)) {
+                card.classList.remove('show-delete');
+                deleteBtn.classList.remove('show');
+            }
         });
 
         cardsContainer.appendChild(card);
