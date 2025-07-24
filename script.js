@@ -81,13 +81,13 @@ async function displaySavedWords() {
         card.innerHTML = `
             <div class="card-inner">
                 <div class="card-front">
-                    <div class="translated-word">${word.translated}</div>
+                    <div class="translated-word" style="font-size:1.3em;font-weight:bold;color:#007aff;">${word.translated}</div>
                 </div>
                 <div class="card-back">
-                    <div class="original-word">${word.original}</div>
+                    <div class="original-word" style="font-size:1.3em;font-weight:bold;color:#333;">${word.original}</div>
                 </div>
             </div>
-            <button class="delete-card-btn">Supprimer</button>
+            <button class="delete-card-btn">×</button>
         `;
 
         const deleteBtn = card.querySelector('.delete-card-btn');
@@ -154,6 +154,16 @@ swiper.on('slideChange', function () {
   }
 });
 
+// Cacher le bouton supprimer si on clique ailleurs
+document.addEventListener('click', (e) => {
+    document.querySelectorAll('.card').forEach(card => {
+        const deleteBtn = card.querySelector('.delete-card-btn');
+        if (!card.contains(e.target)) {
+            card.classList.remove('show-delete');
+            if (deleteBtn) deleteBtn.classList.remove('show');
+        }
+    });
+});
 
 // Afficher les cartes une première fois au chargement de la page
 displaySavedWords();
