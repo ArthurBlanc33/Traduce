@@ -5,6 +5,11 @@ const swiper = new Swiper('.swiper', {
     loop: false, // On ne veut pas revenir au début après la fin
 });
 
+// --- CONFIG SUPABASE ---
+const SUPABASE_URL = 'https://dcguumzcbybbbnnrodmu.supabase.com';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjZ3V1bXpjYnliYmJubnJvZG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3MjIwMjEsImV4cCI6MjA2ODI5ODAyMX0.ua8gsFijlwUHGnByYGTKVE0Bsaje22oRtV0vWK5K0Vk';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 
 // --- PARTIE TRADUCTION (PAGE 1) ---
 
@@ -143,7 +148,3 @@ playBtn.addEventListener('click', () => {
     askNext();
 });
 
-// --- CONFIG SUPABASE ---
-const SUPABASE_URL = 'https://dcguumzcbybbbnnrodmu.supabase.com';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjZ3V1bXpjYnliYmJubnJvZG11Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3MjIwMjEsImV4cCI6MjA2ODI5ODAyMX0.ua8gsFijlwUHGnByYGTKVE0Bsaje22oRtV0vWK5K0Vk';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
